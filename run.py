@@ -63,19 +63,19 @@ def ParseSignal(signal: str) -> dict:
         return {}
 
     # determines the order type of the trade
-    # if('Buy Limit'.lower() in signal[0].lower()):
-    #     trade['OrderType'] = 'Buy Limit'
+    if('Buy Limit'.lower() in signal[0].lower()):
+         trade['OrderType'] = 'Buy Limit'
 
-    # elif('Sell Limit'.lower() in signal[0].lower()):
-    #     trade['OrderType'] = 'Sell Limit'
+    elif('Sell Limit'.lower() in signal[0].lower()):
+         trade['OrderType'] = 'Sell Limit'
 
-    # elif('Buy Stop'.lower() in signal[0].lower()):
-    #     trade['OrderType'] = 'Buy Stop'
+    elif('Buy Stop'.lower() in signal[0].lower()):
+         trade['OrderType'] = 'Buy Stop'
 
-    # elif('Sell Stop'.lower() in signal[0].lower()):
-    #     trade['OrderType'] = 'Sell Stop'
+    elif('Sell Stop'.lower() in signal[0].lower()):
+         trade['OrderType'] = 'Sell Stop'
 
-    if('Buy'.lower() in signal[1].lower()):
+    elif('Buy'.lower() in signal[1].lower()):
         trade['OrderType'] = 'Buy'
     
     elif('Sell'.lower() in signal[1].lower()):
