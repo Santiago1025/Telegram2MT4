@@ -54,35 +54,35 @@ def ParseSignal(signal: str) -> dict:
     signal = [line.rstrip() for line in signal]
 
     trade = {}
+    
+    # extracts symbol from trade signal
+    trade['Symbol'] = (signal[0]).upper()
+    
+    # checks if the symbol is valid, if not, returns an empty dictionary
+    if(trade['Symbol'] not in SYMBOLS):
+        return {}
 
     # determines the order type of the trade
-    if('Buy Limit'.lower() in signal[0].lower()):
-        trade['OrderType'] = 'Buy Limit'
+    # if('Buy Limit'.lower() in signal[0].lower()):
+    #     trade['OrderType'] = 'Buy Limit'
 
-    elif('Sell Limit'.lower() in signal[0].lower()):
-        trade['OrderType'] = 'Sell Limit'
+    # elif('Sell Limit'.lower() in signal[0].lower()):
+    #     trade['OrderType'] = 'Sell Limit'
 
-    elif('Buy Stop'.lower() in signal[0].lower()):
-        trade['OrderType'] = 'Buy Stop'
+    # elif('Buy Stop'.lower() in signal[0].lower()):
+    #     trade['OrderType'] = 'Buy Stop'
 
-    elif('Sell Stop'.lower() in signal[0].lower()):
-        trade['OrderType'] = 'Sell Stop'
+    # elif('Sell Stop'.lower() in signal[0].lower()):
+    #     trade['OrderType'] = 'Sell Stop'
 
-    elif('Buy'.lower() in signal[0].lower()):
+    if('Buy'.lower() in signal[1].lower()):
         trade['OrderType'] = 'Buy'
     
-    elif('Sell'.lower() in signal[0].lower()):
+    elif('Sell'.lower() in signal[1].lower()):
         trade['OrderType'] = 'Sell'
     
     # returns an empty dictionary if an invalid order type was given
     else:
-        return {}
-
-    # extracts symbol from trade signal
-    trade['Symbol'] = (signal[0].split())[-1].upper()
-    
-    # checks if the symbol is valid, if not, returns an empty dictionary
-    if(trade['Symbol'] not in SYMBOLS):
         return {}
     
     # checks wheter or not to convert entry to float because of market exectution option ("NOW")
