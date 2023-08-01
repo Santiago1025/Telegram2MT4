@@ -136,7 +136,9 @@ def GetTradeInformation(update: Update, trade: dict, balance: float) -> None:
     stopLossPips = abs(round((trade['StopLoss'] - trade['Entry']) / multiplier))
 
     # calculates the position size using stop loss and RISK FACTOR
-    trade['PositionSize'] = 1.00
+    trade['PositionSize'] = 1.51
+    #0.10 = 0.03
+    #1.00 = 0.33
 
     # calculates the take profit(s) in pips
     takeProfitPips = []
@@ -335,7 +337,7 @@ def PlaceTrade(update: Update, context: CallbackContext) -> int:
         
         except Exception as error:
             logger.error(f'Error: {error}')
-            errorMessage = f"There was an error parsing this trade 😕\n\nError: {error}\n\nPlease re-enter trade with this format:\n\nBUY/SELL SYMBOL\nEntry \nSL \nTP \n\nOr use the /cancel to command to cancel this action."
+            errorMessage = f"Hubo un error parcero 😕\n\nError: {error}\n\n /cancel"
             update.effective_message.reply_text(errorMessage)
 
             # returns to TRADE state to reattempt trade parsing
