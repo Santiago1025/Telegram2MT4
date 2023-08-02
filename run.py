@@ -3,9 +3,11 @@ import asyncio
 import logging
 import math
 import os
-# import schedule
-# import time
+import schedule
+import time
 
+
+from apscheduler.schedulers.background import BackgroundScheduler
 from metaapi_cloud_sdk import MetaApi
 from prettytable import PrettyTable
 from telegram import ParseMode, Update
