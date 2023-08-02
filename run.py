@@ -3,8 +3,9 @@ import asyncio
 import logging
 import math
 import os
-import schedule
+# import schedule
 import time
+
 
 
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -517,13 +518,13 @@ def Calculation_Command(update: Update, context: CallbackContext) -> int:
 def main() -> None:
     """Runs the Telegram bot."""
 
-    # Schedule the auto_trade function to be executed every minute
-    schedule.every(1).minutes.do(Trade_Command)
+    # # Schedule the auto_trade function to be executed every minute
+    # schedule.every(1).minutes.do(Trade_Command)
 
-    # Keep the program running in an infinite loop
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
+    # # Keep the program running in an infinite loop
+    # while True:
+    #     schedule.run_pending()
+    #     time.sleep(60)
 
     updater = Updater(TOKEN, use_context=True)
 
