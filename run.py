@@ -529,23 +529,23 @@ def main() -> None:
     #     schedule.run_pending()
     #     time.sleep(60)
 
-    # Create a scheduler
-    scheduler = BackgroundScheduler()
+    # # Create a scheduler
+    # scheduler = BackgroundScheduler()
 
-    # Schedule the auto_trade function to be executed every minute
-    scheduler.add_job(auto_trade, 'interval', minutes=1)
+    # # Schedule the auto_trade function to be executed every minute
+    # scheduler.add_job(auto_trade, 'interval', minutes=1)
     
 
-    # Start the scheduler
-    scheduler.start()
+    # # Start the scheduler
+    # scheduler.start()
 
-    try:
-        # Keep the program running
-        while True:
-            time.sleep(1)
-    except (KeyboardInterrupt, SystemExit):
-        # Shut down the scheduler gracefully when the program is terminated
-        scheduler.shutdown()
+    # try:
+    #     # Keep the program running
+    #     while True:
+    #         time.sleep(1)
+    # except (KeyboardInterrupt, SystemExit):
+    #     # Shut down the scheduler gracefully when the program is terminated
+    #     scheduler.shutdown()
 
     updater = Updater(TOKEN, use_context=True)
 
