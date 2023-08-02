@@ -39,13 +39,6 @@ SYMBOLS = ['AUDCAD', 'AUDCHF', 'AUDJPY', 'AUDNZD', 'AUDUSD', 'CADCHF', 'CADJPY',
 # RISK FACTOR
 RISK_FACTOR = float(os.environ.get("RISK_FACTOR"))
 
-# Function to automatically trigger the /trade command every hour
-def auto_trade():
-    # Replace 'bot' with your actual Telegram bot object
-    # You can get the bot object from 'updater.bot' in the main function
-    TOKEN.send_message(chat_id='your_chat_id', text='/trade')
-
-
 # Helper Functions
 def ParseSignal(signal: str) -> dict:
     """Starts process of parsing signal and entering trade on MetaTrader account.
@@ -523,7 +516,7 @@ def main() -> None:
     """Runs the Telegram bot."""
 
     # Schedule the auto_trade function to be executed every minute
-    schedule.every(1).minutes.do(auto_trade)
+    schedule.every(1).minutes.do(Trade_Command)
 
     # Keep the program running in an infinite loop
     while True:
