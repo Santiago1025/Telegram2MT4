@@ -3,12 +3,7 @@ import asyncio
 import logging
 import math
 import os
-# import schedule
-import time
 
-
-
-from apscheduler.schedulers.background import BackgroundScheduler
 from metaapi_cloud_sdk import MetaApi
 from prettytable import PrettyTable
 from telegram import ParseMode, Update
@@ -514,38 +509,9 @@ def Calculation_Command(update: Update, context: CallbackContext) -> int:
 
     return CALCULATE
 
-def auto_trade():
-    MessageHandler(Filters.text & ~Filters.command, PlaceTrade)
-
 
 def main() -> None:
     """Runs the Telegram bot."""
-
-    # # Schedule the auto_trade function to be executed every minute
-    # schedule.every(1).minutes.do(Trade_Command)
-
-    # # Keep the program running in an infinite loop
-    # while True:
-    #     schedule.run_pending()
-    #     time.sleep(60)
-
-    # # Create a scheduler
-    # scheduler = BackgroundScheduler()
-
-    # # Schedule the auto_trade function to be executed every minute
-    # scheduler.add_job(auto_trade, 'interval', minutes=1)
-    
-
-    # # Start the scheduler
-    # scheduler.start()
-
-    # try:
-    #     # Keep the program running
-    #     while True:
-    #         time.sleep(1)
-    # except (KeyboardInterrupt, SystemExit):
-    #     # Shut down the scheduler gracefully when the program is terminated
-    #     scheduler.shutdown()
 
     updater = Updater(TOKEN, use_context=True)
 
