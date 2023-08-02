@@ -514,6 +514,9 @@ def Calculation_Command(update: Update, context: CallbackContext) -> int:
 
     return CALCULATE
 
+def auto_trade():
+    MessageHandler(Filters.text & ~Filters.command, PlaceTrade)
+
 
 def main() -> None:
     """Runs the Telegram bot."""
@@ -530,7 +533,8 @@ def main() -> None:
     scheduler = BackgroundScheduler()
 
     # Schedule the auto_trade function to be executed every minute
-    scheduler.add_job(Trade_Command, 'interval', minutes=1)
+    scheduler.add_job(auto_trade, 'interval', minutes=1)
+    
 
     # Start the scheduler
     scheduler.start()
