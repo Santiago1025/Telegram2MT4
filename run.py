@@ -3,6 +3,8 @@ import asyncio
 import logging
 import math
 import os
+import schedule
+import time
 
 from metaapi_cloud_sdk import MetaApi
 from prettytable import PrettyTable
@@ -36,6 +38,12 @@ SYMBOLS = ['AUDCAD', 'AUDCHF', 'AUDJPY', 'AUDNZD', 'AUDUSD', 'CADCHF', 'CADJPY',
 
 # RISK FACTOR
 RISK_FACTOR = float(os.environ.get("RISK_FACTOR"))
+
+# Function to automatically trigger the /trade command every hour
+def auto_trade():
+    # Replace 'bot' with your actual Telegram bot object
+    # You can get the bot object from 'updater.bot' in the main function
+    TOKEN.send_message(chat_id='your_chat_id', text='/trade')
 
 
 # Helper Functions
@@ -139,6 +147,7 @@ def GetTradeInformation(update: Update, trade: dict, balance: float) -> None:
     trade['PositionSize'] = 1.51
     #0.10 = 0.03
     #1.00 = 0.33
+    #1.51 = 0.50
 
     # calculates the take profit(s) in pips
     takeProfitPips = []
@@ -512,6 +521,14 @@ def Calculation_Command(update: Update, context: CallbackContext) -> int:
 
 def main() -> None:
     """Runs the Telegram bot."""
+
+    # Schedule the auto_trade function to be executed every minute
+    schedule.every(1).minutes.do(auto_trade)
+
+    # Keep the program running in an infinite loop
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
 
     updater = Updater(TOKEN, use_context=True)
 
