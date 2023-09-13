@@ -37,6 +37,8 @@ SYMBOLS = ['AUDCAD', 'AUDCHF', 'AUDJPY', 'AUDNZD', 'AUDUSD', 'CADCHF', 'CADJPY',
 # RISK FACTOR
 RISK_FACTOR = float(os.environ.get("RISK_FACTOR"))
 
+lotaje_porcentajes = [0.7, 0.2, 0.1]
+
 # Helper Functions
 def ParseSignal(signal: str) -> dict:
     """Starts process of parsing signal and entering trade on MetaTrader account.
@@ -265,8 +267,20 @@ async def ConnectMetaTrader(update: Update, trade: dict, enterTrade: bool):
             try:
                 # executes buy market execution order
                 if(trade['OrderType'] == 'Buy'):
-                    for takeProfit in trade['TP']:
-                        result = await connection.create_market_buy_order(trade['Symbol'], trade['PositionSize'] / len(trade['TP']), trade['StopLoss'], takeProfit)
+                    position_size = trade['PositionSize']
+                    tp_values = trade['TP']
+                    total_tp_count = len(tp_values)
+                    # Calculate lot sizes for each take profit level using the specified percentages
+                    lot_sizes = [position_size * percentage for percentage in lotaje_porcentajes]
+
+                    for i in range(total_tp_count):
+                        take_profit = tp_values[i]
+                        lot_size = lot_sizes[i]
+                        result = await connection.create_market_buy_order(trade['Symbol'], lot_size, trade['StopLoss'], take_profit)
+
+                    # for takeProfit in trade['TP']:
+                    #  result = await connection.create_market_buy_order(trade['Symbol'], trade['PositionSize'] / len(trade['TP']), trade['StopLoss'], takeProfit)
+
 
                 # executes buy limit order
                 elif(trade['OrderType'] == 'Buy Limit'):
