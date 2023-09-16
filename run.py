@@ -37,7 +37,6 @@ SYMBOLS = ['AUDCAD', 'AUDCHF', 'AUDJPY', 'AUDNZD', 'AUDUSD', 'CADCHF', 'CADJPY',
 # RISK FACTOR
 RISK_FACTOR = float(os.environ.get("RISK_FACTOR"))
 
-lotaje_porcentajes = [0.7, 0.2, 0.1]
 
 # Helper Functions
 def ParseSignal(signal: str) -> dict:
@@ -64,16 +63,16 @@ def ParseSignal(signal: str) -> dict:
         return {}
 
     # determines the order type of the trade
-    if('Buy Limit'.lower() in signal[0].lower()):
+    if('Buy Limit'.lower() in signal[1].lower()):
          trade['OrderType'] = 'Buy Limit'
 
-    elif('Sell Limit'.lower() in signal[0].lower()):
+    elif('Sell Limit'.lower() in signal[1].lower()):
          trade['OrderType'] = 'Sell Limit'
 
-    elif('Buy Stop'.lower() in signal[0].lower()):
+    elif('Buy Stop'.lower() in signal[1].lower()):
          trade['OrderType'] = 'Buy Stop'
 
-    elif('Sell Stop'.lower() in signal[0].lower()):
+    elif('Sell Stop'.lower() in signal[1].lower()):
          trade['OrderType'] = 'Sell Stop'
 
     elif('Buy'.lower() in signal[1].lower()):
@@ -96,13 +95,13 @@ def ParseSignal(signal: str) -> dict:
     
     trade['TP'] = [float((signal[3].split())[-1])]
 
-    # checks if there's a fourth line and parses it for TP2
-    if(len(signal) > 4):
-        trade['TP'].append(float(signal[4].split()[-1]))
+    # # checks if there's a fourth line and parses it for TP2
+    # if(len(signal) > 4):
+    #     trade['TP'].append(float(signal[4].split()[-1]))
 
-    # checks if there's a fourth line and parses it for TP3
-    if(len(signal) > 5):
-        trade['TP'].append(float(signal[5].split()[-1]))
+    # # checks if there's a fourth line and parses it for TP3
+    # if(len(signal) > 5):
+    #     trade['TP'].append(float(signal[5].split()[-1]))
 
     trade['StopLoss'] = float((signal[6].split())[-1])
     
@@ -267,20 +266,8 @@ async def ConnectMetaTrader(update: Update, trade: dict, enterTrade: bool):
             try:
                 # executes buy market execution order
                 if(trade['OrderType'] == 'Buy'):
-                    position_size = trade['PositionSize']
-                    tp_values = trade['TP']
-                    total_tp_count = len(tp_values)
-                    # Calculate lot sizes for each take profit level using the specified percentages
-                    lot_sizes = [position_size * percentage for percentage in lotaje_porcentajes]
-
-                    for i in range(total_tp_count):
-                        take_profit = tp_values[i]
-                        lot_size = lot_sizes[i]
-                        result = await connection.create_market_buy_order(trade['Symbol'], lot_size, trade['StopLoss'], take_profit)
-
-                    # for takeProfit in trade['TP']:
-                    #  result = await connection.create_market_buy_order(trade['Symbol'], trade['PositionSize'] / len(trade['TP']), trade['StopLoss'], takeProfit)
-
+                    for takeProfit in trade['TP']:
+                    result = await connection.create_market_sell_order(trade['Symbol'], trade['PositionSize'] / len(trade['TP']), trade['StopLoss'], takeProfit)
 
                 # executes buy limit order
                 elif(trade['OrderType'] == 'Buy Limit'):
@@ -294,16 +281,8 @@ async def ConnectMetaTrader(update: Update, trade: dict, enterTrade: bool):
 
                 # executes sell market execution order
                 elif(trade['OrderType'] == 'Sell'):
-                    position_size = trade['PositionSize']
-                    tp_values = trade['TP']
-                    total_tp_count = len(tp_values)
-                    # Calculate lot sizes for each take profit level using the specified percentages
-                    lot_sizes = [position_size * percentage for percentage in lotaje_porcentajes]
-
-                    for i in range(total_tp_count):
-                        take_profit = tp_values[i]
-                        lot_size = lot_sizes[i]
-                        result = await connection.create_market_buy_order(trade['Symbol'], lot_size, trade['StopLoss'], take_profit)
+                    for takeProfit in trade['TP']:
+                        result = await connection.create_market_sell_order(trade['Symbol'], trade['PositionSize'] / len(trade['TP']), trade['StopLoss'], takeProfit)
 
                 # executes sell limit order
                 elif(trade['OrderType'] == 'Sell Limit'):
