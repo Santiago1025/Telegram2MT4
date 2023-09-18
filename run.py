@@ -294,8 +294,16 @@ async def ConnectMetaTrader(update: Update, trade: dict, enterTrade: bool):
 
                 # executes sell market execution order
                 elif(trade['OrderType'] == 'Sell'):
-                    for takeProfit in trade['TP']:
-                        result = await connection.create_market_sell_order(trade['Symbol'], trade['PositionSize'] / len(trade['TP']), trade['StopLoss'], takeProfit)
+                    position_size = trade['PositionSize']
+                    tp_values = trade['TP']
+                    total_tp_count = len(tp_values)
+                    # Calculate lot sizes for each take profit level using the specified percentages
+                    lot_sizes = [position_size * percentage for percentage in lotaje_porcentajes]
+
+                    for i in range(total_tp_count):
+                        take_profit = tp_values[i]
+                        lot_size = lot_sizes[i]
+                        result = await connection.create_market_buy_order(trade['Symbol'], lot_size, trade['StopLoss'], take_profit)
 
                 # executes sell limit order
                 elif(trade['OrderType'] == 'Sell Limit'):
