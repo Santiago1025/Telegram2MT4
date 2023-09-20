@@ -37,7 +37,7 @@ SYMBOLS = ['AUDCAD', 'AUDCHF', 'AUDJPY', 'AUDNZD', 'AUDUSD', 'CADCHF', 'CADJPY',
 # RISK FACTOR
 RISK_FACTOR = float(os.environ.get("RISK_FACTOR"))
 
-lotaje_porcentajes = [0.7, 0.2, 0.1]
+lotaje_porcentajes = [1.0, 0.2, 0.1]
 
 # Helper Functions
 def ParseSignal(signal: str) -> dict:
@@ -303,7 +303,7 @@ async def ConnectMetaTrader(update: Update, trade: dict, enterTrade: bool):
                     for i in range(total_tp_count):
                         take_profit = tp_values[i]
                         lot_size = lot_sizes[i]
-                        result = await connection.create_market_buy_order(trade['Symbol'], lot_size, trade['StopLoss'], take_profit)
+                        result = await connection.create_market_sell_order(trade['Symbol'], lot_size, trade['StopLoss'], take_profit)
 
                 # executes sell limit order
                 elif(trade['OrderType'] == 'Sell Limit'):
