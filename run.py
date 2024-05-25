@@ -434,7 +434,7 @@ def welcome(update: Update, context: CallbackContext) -> None:
         context: CallbackContext object that stores commonly used objects in handler callbacks
     """
 
-    welcome_message = "Prueba del FIC bot"
+    welcome_message = "Prueba del FIC bot 2.0"
     
     # sends messages to user
     update.effective_message.reply_text(welcome_message)
@@ -449,17 +449,13 @@ def help(update: Update, context: CallbackContext) -> None:
         context: CallbackContext object that stores commonly used objects in handler callbacks
     """
 
-    help_message = "This bot is used to automatically enter trades onto your MetaTrader account directly from Telegram. To begin, ensure that you are authorized to use this bot by adjusting your Python script or environment variables.\n\nThis bot supports all trade order types (Market Execution, Limit, and Stop)\n\nAfter an extended period away from the bot, please be sure to re-enter the start command to restart the connection to your MetaTrader account."
-    commands = "List of COMANDOS:\n/start : displays welcome message\n/help : displays list of commands and example trades\n/trade : takes in user inputted trade for parsing and placement\n/calculate : calculates trade information for a user inputted trade"
-    trade_example = "Example Trades 💴:\n\n"
-    market_execution_example = "Market Execution:\nBUY GBPUSD\nEntry NOW\nSL 1.14336\nTP 1.28930\nTP 1.29845\n\n"
-    limit_example = "Limit Execution:\nBUY LIMIT GBPUSD\nEntry 1.14480\nSL 1.14336\nTP 1.28930\n\n"
-    note = "You are able to enter up to two take profits. If two are entered, both trades will use half of the position size, and one will use TP1 while the other uses TP2.\n\nNote: Use 'NOW' as the entry to enter a market execution trade."
+    help_message = "Este bot está creado para crear, modificar y eliminar ÓRDENES"
+    commands = "Lista de COMANDOS:\n/start : Muestra el mensaje de bienvenida\n/help : Muestra la lista de comandos\n/crearOrden : Crea una orden"
 
     # sends messages to user
     update.effective_message.reply_text(help_message)
     update.effective_message.reply_text(commands)
-    update.effective_message.reply_text(trade_example + market_execution_example + limit_example + note)
+    #update.effective_message.reply_text(trade_example + market_execution_example + limit_example + note)
 
     return
 
