@@ -8,10 +8,6 @@ from metaapi_cloud_sdk import MetaApi
 from prettytable import PrettyTable
 from telegram import ParseMode, Update
 from telegram.ext import CommandHandler, Filters, MessageHandler, Updater, ConversationHandler, CallbackContext
-from pymongo import MongoClient
-
-#CONEXIÓN A BASE DE DATOS MONGO
-
 
 # MetaAPI Credentials
 API_KEY = os.environ.get("API_KEY")
