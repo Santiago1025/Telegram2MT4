@@ -376,7 +376,7 @@ def unknown_command(update: Update, context: CallbackContext) -> None:
 
     return
 
-def crearOrden_Command(update: Update, context: CallbackContext) -> int:
+def agregarOrden_Command(update: Update, context: CallbackContext) -> int:
     """Asks user to enter the trade they would like to place.
 
     Arguments:
@@ -402,19 +402,17 @@ def PlaceTrade(update: Update, context: CallbackContext) -> int:
     """
 
     # checks if the trade has already been parsed or not
-    if(context.user_data['trade'] == None):
-
-        try: 
+    try: 
             update.effective_message.reply_text("Agregar nueva orden")
             update.effective_message.reply_text("Selecciona un instituto:")
         
-        except Exception as error:
+    except Exception as error:
             logger.error(f'Error: {error}')
             errorMessage = f"Hubo un error parcero 😕\n\nError: {error}\n\n /cancel"
             update.effective_message.reply_text(errorMessage)
 
             # returns to TRADE state to reattempt trade parsing
-            return ORDEN
+    return ORDEN
     
     # attempts connection to MetaTrader and places trade
     asyncio.run(ConnectMetaTrader(update, context.user_data['trade'], True))
@@ -500,7 +498,7 @@ def main() -> None:
     dp.add_handler(CommandHandler("help", help))
 
     conv_handler = ConversationHandler(
-        entry_points=[CommandHandler("crearOrden", crearOrden_Command),],
+        entry_points=[CommandHandler("agregarOrden", agregarOrden_Command),],
         states={
             ORDEN: [MessageHandler(Filters.text & ~Filters.command, PlaceTrade)],
             #TRADE: [MessageHandler(Filters.text & ~Filters.command, PlaceTrade)],
