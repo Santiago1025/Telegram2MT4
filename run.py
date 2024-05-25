@@ -15,7 +15,7 @@ ACCOUNT_ID = os.environ.get("ACCOUNT_ID")
 
 # Telegram Credentials
 TOKEN = os.environ.get("TOKEN")
-TELEGRAM_USER = os.environ.get("TELEGRAM_USER")
+#TELEGRAM_USER = os.environ.get("TELEGRAM_USER")
 
 # Heroku Credentials
 APP_URL = os.environ.get("APP_URL")
@@ -419,9 +419,6 @@ def unknown_command(update: Update, context: CallbackContext) -> None:
         update: update from Telegram
         context: CallbackContext object that stores commonly used objects in handler callbacks
     """
-    if(not(update.effective_message.chat.username == TELEGRAM_USER)):
-        update.effective_message.reply_text("You are not authorized to use this bot! 🙅🏽‍♂️")
-        return
 
     update.effective_message.reply_text("Unknown command. Use /trade to place a trade or /calculate to find information for a trade. You can also use the /help command to view instructions for this bot.")
 
@@ -500,9 +497,6 @@ def Trade_Command(update: Update, context: CallbackContext) -> int:
         update: update from Telegram
         context: CallbackContext object that stores commonly used objects in handler callbacks
     """
-    if(not(update.effective_message.chat.username == TELEGRAM_USER)):
-        update.effective_message.reply_text("You are not authorized to use this bot! 🙅🏽‍♂️")
-        return ConversationHandler.END
     
     # initializes the user's trade as empty prior to input and parsing
     context.user_data['trade'] = None
@@ -519,9 +513,6 @@ def Calculation_Command(update: Update, context: CallbackContext) -> int:
         update: update from Telegram
         context: CallbackContext object that stores commonly used objects in handler callbacks
     """
-    if(not(update.effective_message.chat.username == TELEGRAM_USER)):
-        update.effective_message.reply_text("You are not authorized to use this bot! 🙅🏽‍♂️")
-        return ConversationHandler.END
 
     # initializes the user's trade as empty prior to input and parsing
     context.user_data['trade'] = None
