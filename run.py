@@ -71,7 +71,7 @@ def PlaceOrder(update: Update, context: CallbackContext) -> int:
 
     update.effective_message.reply_text("Agregar nueva orden")
     update.effective_message.reply_text("Selecciona un instituto:")
-
+    update.effective_message.reply_text("/100 \n /101 \n /102 \n /103 \n /104 \n")
     return ORDEN
     return ConversationHandler.END
 
