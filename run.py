@@ -8,6 +8,10 @@ from metaapi_cloud_sdk import MetaApi
 from prettytable import PrettyTable
 from telegram import ParseMode, Update
 from telegram.ext import CommandHandler, Filters, MessageHandler, Updater, ConversationHandler, CallbackContext
+from pymongo import MongoClient
+
+#CONEXIÓN A BASE DE DATOS MONGO
+
 
 # MetaAPI Credentials
 API_KEY = os.environ.get("API_KEY")
@@ -38,7 +42,7 @@ def unknown_command(update: Update, context: CallbackContext) -> None:
         context: CallbackContext object that stores commonly used objects in handler callbacks
     """
 
-    update.effective_message.reply_text("Unknown command. Use /trade to place a trade or /calculate to find information for a trade. You can also use the /help command to view instructions for this bot.")
+    update.effective_message.reply_text("No se reconoce el comando")
 
     return
 
@@ -163,7 +167,7 @@ def main() -> None:
     dp.add_handler(conv_handler)
 
     # message handler for all messages that are not included in conversation handler
-    dp.add_handler(MessageHandler(Filters.text, PlaceOrder))
+    dp.add_handler(MessageHandler(Filters.text, unknown_command))
 
     # log all errors
     dp.add_error_handler(error)
