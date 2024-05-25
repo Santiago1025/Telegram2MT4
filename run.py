@@ -29,15 +29,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 # possibles states for conversation handler
-CALCULATE, TRADE, DECISION = range(3)
-
-# allowed FX symbols
-SYMBOLS = ['AUDCAD', 'AUDCHF', 'AUDJPY', 'AUDNZD', 'AUDUSD', 'CADJPY', 'CHFJPY', 'EURAUD', 'EURCAD', 'EURCHF', 'EURGBP', 'EURJPY', 'EURNZD', 'EURUSD', 'GBPAUD', 'GBPCAD', 'GBPCHF', 'GBPJPY', 'GBPNZD', 'GBPUSD', 'NOW','NZDJPY', 'NZDUSD', 'USDCAD', 'USDCHF', 'USDJPY', 'XAGUSD', 'XAUUSD']
-
-# RISK FACTOR
-RISK_FACTOR = float(os.environ.get("RISK_FACTOR"))
-
-lotaje_porcentajes = [1.0, 0.2, 0.1]
+CALCULATE, ORDEN, DECISION = range(3)
 
 # Helper Functions
 def ParseSignal(signal: str) -> dict:
@@ -333,46 +325,6 @@ async def ConnectMetaTrader(update: Update, trade: dict, enterTrade: bool):
     return
 
 
-# Handler Functions
-def PlaceTrade(update: Update, context: CallbackContext) -> int:
-    """Parses trade and places on MetaTrader account.   
-    
-    Arguments:
-        update: update from Telegram
-        context: CallbackContext object that stores commonly used objects in handler callbacks
-    """
-
-    # checks if the trade has already been parsed or not
-    if(context.user_data['trade'] == None):
-
-        try: 
-            # parses signal from Telegram message
-            trade = ParseSignal(update.effective_message.text)
-            
-            # checks if there was an issue with parsing the trade
-            if(not(trade)):
-                raise Exception('Invalid Trade')
-
-            # sets the user context trade equal to the parsed trade
-            context.user_data['trade'] = trade
-            update.effective_message.reply_text("Trade Successfully Parsed! 🥳\nConnecting to MetaTrader ... \n(May take a while) ⏰")
-        
-        except Exception as error:
-            logger.error(f'Error: {error}')
-            errorMessage = f"Hubo un error parcero 😕\n\nError: {error}\n\n /cancel"
-            update.effective_message.reply_text(errorMessage)
-
-            # returns to TRADE state to reattempt trade parsing
-            return TRADE
-    
-    # attempts connection to MetaTrader and places trade
-    asyncio.run(ConnectMetaTrader(update, context.user_data['trade'], True))
-    
-    # removes trade from user context data
-    context.user_data['trade'] = None
-
-    return ConversationHandler.END
-
 def CalculateTrade(update: Update, context: CallbackContext) -> int:
     """Parses trade and places on MetaTrader account.   
     
@@ -424,6 +376,53 @@ def unknown_command(update: Update, context: CallbackContext) -> None:
 
     return
 
+def crearOrden_Command(update: Update, context: CallbackContext) -> int:
+    """Asks user to enter the trade they would like to place.
+
+    Arguments:
+        update: update from Telegram
+        context: CallbackContext object that stores commonly used objects in handler callbacks
+    """
+    
+    # initializes the user's trade as empty prior to input and parsing
+    context.user_data['trade'] = None
+    
+    # asks user to enter the trade
+    update.effective_message.reply_text("Creando orden.")
+
+    return ORDEN
+
+# Handler Functions
+def PlaceTrade(update: Update, context: CallbackContext) -> int:
+    """Parses trade and places on MetaTrader account.   
+    
+    Arguments:
+        update: update from Telegram
+        context: CallbackContext object that stores commonly used objects in handler callbacks
+    """
+
+    # checks if the trade has already been parsed or not
+    if(context.user_data['trade'] == None):
+
+        try: 
+            update.effective_message.reply_text("Agregar nueva orden")
+            update.effective_message.reply_text("Selecciona un instituto:")
+        
+        except Exception as error:
+            logger.error(f'Error: {error}')
+            errorMessage = f"Hubo un error parcero 😕\n\nError: {error}\n\n /cancel"
+            update.effective_message.reply_text(errorMessage)
+
+            # returns to TRADE state to reattempt trade parsing
+            return ORDEN
+    
+    # attempts connection to MetaTrader and places trade
+    asyncio.run(ConnectMetaTrader(update, context.user_data['trade'], True))
+    
+    # removes trade from user context data
+    context.user_data['trade'] = None
+
+    return ConversationHandler.END
 
 # Command Handlers
 def welcome(update: Update, context: CallbackContext) -> None:
@@ -486,39 +485,6 @@ def error(update: Update, context: CallbackContext) -> None:
 
     return
 
-def Trade_Command(update: Update, context: CallbackContext) -> int:
-    """Asks user to enter the trade they would like to place.
-
-    Arguments:
-        update: update from Telegram
-        context: CallbackContext object that stores commonly used objects in handler callbacks
-    """
-    
-    # initializes the user's trade as empty prior to input and parsing
-    context.user_data['trade'] = None
-    
-    # asks user to enter the trade
-    update.effective_message.reply_text("Please enter the trade that you would like to place.")
-
-    return TRADE
-
-def Calculation_Command(update: Update, context: CallbackContext) -> int:
-    """Asks user to enter the trade they would like to calculate trade information for.
-
-    Arguments:
-        update: update from Telegram
-        context: CallbackContext object that stores commonly used objects in handler callbacks
-    """
-
-    # initializes the user's trade as empty prior to input and parsing
-    context.user_data['trade'] = None
-
-    # asks user to enter the trade
-    update.effective_message.reply_text("Please enter the trade that you would like to calculate.")
-
-    return CALCULATE
-
-
 def main() -> None:
     """Runs the Telegram bot."""
 
@@ -534,9 +500,10 @@ def main() -> None:
     dp.add_handler(CommandHandler("help", help))
 
     conv_handler = ConversationHandler(
-        entry_points=[CommandHandler("trade", Trade_Command), CommandHandler("calculate", Calculation_Command)],
+        entry_points=[CommandHandler("crearOrden", crearOrden_Command),],
         states={
-            TRADE: [MessageHandler(Filters.text & ~Filters.command, PlaceTrade)],
+            ORDEN: [MessageHandler(Filters.text & ~Filters.command, PlaceTrade)],
+            #TRADE: [MessageHandler(Filters.text & ~Filters.command, PlaceTrade)],
             CALCULATE: [MessageHandler(Filters.text & ~Filters.command, CalculateTrade)],
             DECISION: [CommandHandler("yes", PlaceTrade), CommandHandler("no", cancel)]
         },
