@@ -434,7 +434,7 @@ def welcome(update: Update, context: CallbackContext) -> None:
         context: CallbackContext object that stores commonly used objects in handler callbacks
     """
 
-    welcome_message = "Prueba del FIC bot 2.0"
+    welcome_message = "Prueba del FIC bot 3.0, /help para comandos"
     
     # sends messages to user
     update.effective_message.reply_text(welcome_message)
@@ -450,7 +450,7 @@ def help(update: Update, context: CallbackContext) -> None:
     """
 
     help_message = "Este bot está creado para crear, modificar y eliminar ÓRDENES"
-    commands = "Lista de COMANDOS:\n/start : Muestra el mensaje de bienvenida\n/help : Muestra la lista de comandos\n/crearOrden : Crea una orden"
+    commands = "Lista de COMANDOS:\n/start : Muestra el mensaje de bienvenida\n/help : Muestra la lista de comandos\n/MostrarOrden : Muestra información de las órdenes (IDOK, IDBK, ID Orden BK, ID Tipo Orden OK, ID rol OK, ID Persona OK) \n/agregarOrden : Crea una orden \n/modificarOrden : Necesitas introducir su ID OK para modificarla \n/eliminarOrden : Necesitas introducir su ID OK para eliminarla"
 
     # sends messages to user
     update.effective_message.reply_text(help_message)
