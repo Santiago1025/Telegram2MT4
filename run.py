@@ -402,17 +402,19 @@ def PlaceTrade(update: Update, context: CallbackContext) -> int:
     """
 
     # checks if the trade has already been parsed or not
-    try: 
-            update.effective_message.reply_text("Agregar nueva orden")
-            update.effective_message.reply_text("Selecciona un instituto:")
-        
-    except Exception as error:
-            logger.error(f'Error: {error}')
-            errorMessage = f"Hubo un error parcero 😕\n\nError: {error}\n\n /cancel"
-            update.effective_message.reply_text(errorMessage)
+    context.user_data['trade'] = None
+    if(context.user_data['trade'] == None):
+        try: 
+                update.effective_message.reply_text("Agregar nueva orden")
+                update.effective_message.reply_text("Selecciona un instituto:")
+            
+        except Exception as error:
+                logger.error(f'Error: {error}')
+                errorMessage = f"Hubo un error parcero 😕\n\nError: {error}\n\n /cancel"
+                update.effective_message.reply_text(errorMessage)
 
             # returns to TRADE state to reattempt trade parsing
-    return ORDEN
+        return ORDEN
     
     # attempts connection to MetaTrader and places trade
     asyncio.run(ConnectMetaTrader(update, context.user_data['trade'], True))
@@ -431,7 +433,7 @@ def welcome(update: Update, context: CallbackContext) -> None:
         context: CallbackContext object that stores commonly used objects in handler callbacks
     """
 
-    welcome_message = "Prueba del FIC bot 3.0, /help para comandos"
+    welcome_message = "Prueba del FIC bot 4.0, /help para comandos"
     
     # sends messages to user
     update.effective_message.reply_text(welcome_message)
