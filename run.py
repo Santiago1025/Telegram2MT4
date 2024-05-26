@@ -52,19 +52,31 @@ def agregarOrden_Command(update: Update, context: CallbackContext) -> int:
     update.effective_message.reply_text("Selecciona un instituto:")
     update.effective_message.reply_text("/100 \n /101 \n /102 \n /103 \n /104 \n")
 
-    return ORDEN
+    return ConversationHandler.END
 def instituto100_Command(update: Update, context: CallbackContext) -> int:
     # asks user to enter the trade
     update.effective_message.reply_text("Selecciona un Negocio:")
     update.effective_message.reply_text("/DCC")
 
-    return ORDEN
+    return ConversationHandler.END
 def negocioDCC_Command(update: Update, context: CallbackContext) -> int:
     # asks user to enter the trade
     update.effective_message.reply_text("idOrdenOK: 100-ff9e51c2d469")
     update.effective_message.reply_text("Escribe el IdOrdenBK:")
 
-    return ORDEN
+    return ConversationHandler.END
+def tipoOrdenIdCarrito_Command(update: Update, context: CallbackContext) -> int:
+    # asks user to enter the trade
+    update.effective_message.reply_text("Selecciona un Rol")
+    update.effective_message.reply_text("/idCliente\n/idVendedor\n/idProveedor")
+
+    return ConversationHandler.END
+def idCliente_Command(update: Update, context: CallbackContext) -> int:
+    # asks user to enter the trade
+    update.effective_message.reply_text("Selecciona una persona")
+    update.effective_message.reply_text("/Juanito_Perez_Perez\n/Carlos_Fernández_Díaz\n/Ana_Martínez_Gómez\nPedrito_González_Martínez\n/Maria_López_Hernández\n/Luis_Ramírez_Sánchez")
+
+    return ConversationHandler.END
 # Handler Functions
 def PlaceOrder(update: Update, context: CallbackContext) -> int:
     """Parses trade and places on MetaTrader account.   
@@ -156,7 +168,7 @@ def main() -> None:
     dp.add_handler(CommandHandler("help", help))
 
     conv_handler = ConversationHandler(
-        entry_points=[CommandHandler("agregarOrden", agregarOrden_Command),CommandHandler("100", instituto100_Command),CommandHandler("DCC", negocioDCC_Command)],
+        entry_points=[CommandHandler("agregarOrden", agregarOrden_Command),CommandHandler("100", instituto100_Command),CommandHandler("DCC", negocioDCC_Command),CommandHandler("idCarrito", tipoOrdenIdCarrito_Command),CommandHandler("idCliente", idCliente_Command)],
         states={
             ORDEN: [MessageHandler(Filters.text & ~Filters.command, PlaceOrder)],
             #TRADE: [MessageHandler(Filters.text & ~Filters.command, PlaceTrade)],
