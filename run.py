@@ -77,7 +77,7 @@ def idCliente_Command(update: Update, context: CallbackContext) -> int:
     update.effective_message.reply_text("/Juanito_Perez_Perez \n /Carlos_Fernandez_Diaz \n /Ana_Martinez_Gomez \n /Pedrito_Gonzalez_Martinez \n /Maria_Lopez_Hernandez \n /Luis_Ramirez_Sanchez")
 
     return ConversationHandler.END
-def juanito_command(update: Update, context: CallbackContext) -> int:
+def juanito_Command(update: Update, context: CallbackContext) -> int:
     # asks user to enter the trade
     update.effective_message.reply_text("Orden creada con éxito!")
 
