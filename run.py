@@ -101,7 +101,7 @@ def welcome(update: Update, context: CallbackContext) -> None:
         context: CallbackContext object that stores commonly used objects in handler callbacks
     """
 
-    welcome_message = "Prueba del FIC bot 4.0, /help para comandos"
+    welcome_message = "Prueba del FIC bot 5.0 Órdenes, /help para comandos"
     
     # sends messages to user
     update.effective_message.reply_text(welcome_message)
