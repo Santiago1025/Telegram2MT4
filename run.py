@@ -31,15 +31,9 @@ logger = logging.getLogger(__name__)
 # possibles states for conversation handler
 CALCULATE, ORDEN, DECISION = range(3)
 def unknown_command(update: Update, context: CallbackContext) -> None:
-    """Checks if the user is authorized to use this bot or shares to use /help command for instructions.
 
-    Arguments:
-        update: update from Telegram
-        context: CallbackContext object that stores commonly used objects in handler callbacks
-    """
-
-    update.effective_message.reply_text("Unknown command. Use /trade to place a trade or /calculate to find information for a trade. You can also use the /help command to view instructions for this bot.")
-
+    update.effective_message.reply_text("Selecciona Tipo de Orden:")
+    update.effective_message.reply_text("/idCarrito\n/IdVenta\n/idFavoritos")
     return
 
 def agregarOrden_Command(update: Update, context: CallbackContext) -> int:
@@ -54,10 +48,23 @@ def agregarOrden_Command(update: Update, context: CallbackContext) -> int:
     context.user_data['trade'] = None
     
     # asks user to enter the trade
-    update.effective_message.reply_text("Creando orden.")
+    update.effective_message.reply_text("Agregar nueva orden")
+    update.effective_message.reply_text("Selecciona un instituto:")
+    update.effective_message.reply_text("/100 \n /101 \n /102 \n /103 \n /104 \n")
 
     return ORDEN
+def instituto100_Command(update: Update, context: CallbackContext) -> int:
+    # asks user to enter the trade
+    update.effective_message.reply_text("Selecciona un Negocio:")
+    update.effective_message.reply_text("/DCC")
 
+    return ORDEN
+def negocioDCC_Command(update: Update, context: CallbackContext) -> int:
+    # asks user to enter the trade
+    update.effective_message.reply_text("idOrdenOK: 100-ff9e51c2d469")
+    update.effective_message.reply_text("Escribe el IdOrdenBK:")
+
+    return ORDEN
 # Handler Functions
 def PlaceOrder(update: Update, context: CallbackContext) -> int:
     """Parses trade and places on MetaTrader account.   
@@ -69,9 +76,7 @@ def PlaceOrder(update: Update, context: CallbackContext) -> int:
 
     # checks if the trade has already been parsed or not
 
-    update.effective_message.reply_text("Agregar nueva orden")
-    update.effective_message.reply_text("Selecciona un instituto:")
-    update.effective_message.reply_text("/100 \n /101 \n /102 \n /103 \n /104 \n")
+    
     return ORDEN
     return ConversationHandler.END
 
@@ -151,7 +156,7 @@ def main() -> None:
     dp.add_handler(CommandHandler("help", help))
 
     conv_handler = ConversationHandler(
-        entry_points=[CommandHandler("agregarOrden", agregarOrden_Command),],
+        entry_points=[CommandHandler("agregarOrden", agregarOrden_Command),CommandHandler("100", instituto100_Command),CommandHandler("DCC", negocioDCC_Command)],
         states={
             ORDEN: [MessageHandler(Filters.text & ~Filters.command, PlaceOrder)],
             #TRADE: [MessageHandler(Filters.text & ~Filters.command, PlaceTrade)],
@@ -163,7 +168,7 @@ def main() -> None:
     dp.add_handler(conv_handler)
 
     # message handler for all messages that are not included in conversation handler
-    dp.add_handler(MessageHandler(Filters.text, PlaceOrder))
+    dp.add_handler(MessageHandler(Filters.text, unknown_command))
 
     # log all errors
     dp.add_error_handler(error)
