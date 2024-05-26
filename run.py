@@ -74,7 +74,7 @@ def tipoOrdenIdCarrito_Command(update: Update, context: CallbackContext) -> int:
 def idCliente_Command(update: Update, context: CallbackContext) -> int:
     # asks user to enter the trade
     update.effective_message.reply_text("Selecciona una persona")
-    update.effective_message.reply_text("/Juanito_Perez_Perez\n/Carlos_Fernández_Díaz\n/Ana_Martínez_Gómez\nPedrito_González_Martínez\n/Maria_López_Hernández\n/Luis_Ramírez_Sánchez")
+    update.effective_message.reply_text("/Juanito_Perez_Perez\n /Carlos_Fernández_Díaz\n /Ana_Martínez_Gómez\n /Pedrito_González_Martínez\n /Maria_López_Hernández\n /Luis_Ramírez_Sánchez")
 
     return ConversationHandler.END
 # Handler Functions
