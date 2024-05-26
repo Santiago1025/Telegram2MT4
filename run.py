@@ -74,7 +74,12 @@ def tipoOrdenIdCarrito_Command(update: Update, context: CallbackContext) -> int:
 def idCliente_Command(update: Update, context: CallbackContext) -> int:
     # asks user to enter the trade
     update.effective_message.reply_text("Selecciona una persona")
-    update.effective_message.reply_text("/Juanito_Perez_Perez\n /Carlos_Fernández_Díaz\n /Ana_Martínez_Gómez\n /Pedrito_González_Martínez\n /Maria_López_Hernández\n /Luis_Ramírez_Sánchez")
+    update.effective_message.reply_text("/Juanito_Perez_Perez \n /Carlos_Fernandez_Diaz \n /Ana_Martinez_Gomez \n /Pedrito_Gonzalez_Martinez \n /Maria_Lopez_Hernandez \n /Luis_Ramirez_Sanchez")
+
+    return ConversationHandler.END
+def juanito_command(update: Update, context: CallbackContext) -> int:
+    # asks user to enter the trade
+    update.effective_message.reply_text("Orden creada con éxito!")
 
     return ConversationHandler.END
 # Handler Functions
@@ -168,7 +173,7 @@ def main() -> None:
     dp.add_handler(CommandHandler("help", help))
 
     conv_handler = ConversationHandler(
-        entry_points=[CommandHandler("agregarOrden", agregarOrden_Command),CommandHandler("100", instituto100_Command),CommandHandler("DCC", negocioDCC_Command),CommandHandler("idCarrito", tipoOrdenIdCarrito_Command),CommandHandler("idCliente", idCliente_Command)],
+        entry_points=[CommandHandler("agregarOrden", agregarOrden_Command),CommandHandler("100", instituto100_Command),CommandHandler("DCC", negocioDCC_Command),CommandHandler("idCarrito", tipoOrdenIdCarrito_Command),CommandHandler("idCliente", idCliente_Command),CommandHandler("Juanito_Perez_Perez", juanito_Command),  ],
         states={
             ORDEN: [MessageHandler(Filters.text & ~Filters.command, PlaceOrder)],
             #TRADE: [MessageHandler(Filters.text & ~Filters.command, PlaceTrade)],
